@@ -1,0 +1,31 @@
+theory MapReduce
+  imports Main
+begin
+
+
+locale MReduce = 
+  fixes mapping  ::"'a \<Rightarrow> ('k * 'v)list "
+  fixes shuffling::" (('k \<times>'v) list list \<Rightarrow> ('k \<times> ('v list)) list)"
+  fixes reduce   ::"(('k \<times> ('v list)) \<Rightarrow> ('k \<times> 'v))"
+(****
+  assumes mapping_cor: "mapping"
+***)
+  assumes shuffling_cor:"List.member (shuffling xss) (k,vs) \<Longrightarrow> (\<exists> xs . List.member xss xs \<and> List.member xs (k,v)) = (List.member vs v) "
+
+begin
+
+
+definition Mapreduce:: "'a list \<Rightarrow>('k \<times> 'v)list" where
+  "Mapreduce s = map reduce(shuffling (map mapping s ))"
+
+(***
+definition Mapreduces::"'a list \<Rightarrow> 'a list \<Rightarrow>('k \<times> 'v)list" where
+  "Mapreduces s t= map reduce( (shuffling (map mapping s)) @ (shuffling (map mapping t)))"
+***)
+
+end
+
+
+
+
+end
